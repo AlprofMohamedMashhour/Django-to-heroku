@@ -1,0 +1,85 @@
+                                            السلام عليكم
+                                        انا محمد مشهور
+                                      python developer
+heroku بحثت كتير على ازاى ممكن ارفع المشروع بتاعى على
+                  وللاسف يأما الشرح على  لينكس او ماك
+                          لكن الويندز لا
+قولت ارفع الفيديو ده اساعد بيه على  توسيع المحتوى العربى
+                وكمان لان ذكاة العلم نشره
+                      بسم الله
+ـــــــــــــــــــــــــــــ
+pip install virtualenv
+cd Desktop
+virtualenv site
+.\scripts\activate
+mkdir src
+cd src
+pip install django
+pip install Pillow
+django-admin startproject mashhour .
+python manage.py runserver
+python manage.py startapp app
+python manage.py createsuperuser
+python manage.py makemigrations
+python manage.py migrate
+ــــــــــــــــــــــــــــ
+1-Sign up to heroku
+
+2-Then install the Heroku Toolbet
+
+3- install this lib
+      pip install dj-database-url
+      pip install gunicorn
+      pip install psycopg2
+      pip install whitenoise
+
+4-install (git) after that write this command
+      git config --global user.email "your email"
+      git config --global user.name "username"
+
+5-Add a "Procfile" file in the project root
+      content [web: gunicorn yourProjectName.wsgi --log-file -]
+
+6-external your lib to requirements.txt in the project root
+      pip frezze >requirements.txt
+
+7-add a runtime.txt  in the project root
+      content [Python version]  ----example [python-3.8.2]
+      python --version
+
+
+8-conf of wsgi.py  file
+        from whitenoise import WhiteNoise
+        application = WhiteNoise(application)
+
+
+9-conf of sittings.py file
+       #in the top of middleware add
+       'whitenoise.middleware.WhiteNoiseMiddleware',
+
+      # Static files (CSS, JavaScript, Images)
+      # https://docs.djangoproject.com/en/2.2/howto/static-files/
+      STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+      STATIC_URL = '/static/'
+      STATICFILES_DIRS = [
+      os.path.join(BASE_DIR, "static")
+      ]
+
+      STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+      import dj_database_url
+      prod_db  =  dj_database_url.config(conn_max_age=500)
+      DATABASES['default'].update(prod_db)
+
+
+10-conf of heroku
+    open git in your app root
+      1- heroku login
+      2-heroku create "yourDomain"
+      3-go to sittings.py to modify ALLOWED_HOSTS = ['yourDomain.herokuapp.com']
+      4-git init
+      5-heroku git:remote -a "yourDomain"
+      6-git add .
+      7-git commit -m "Initial commit"  #if error in this step check ↑↑ step 4
+      8-git push heroku master    # if error in this step check this "heroku config:set  DISABLE_COLLECTSTATIC=1"
+      9-heroku run python manage.py migrate
